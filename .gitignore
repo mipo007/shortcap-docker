@@ -6,3 +6,4 @@ dist/
 shortcap.egg-info/
 .env
 *.mp4
+data/config.json
