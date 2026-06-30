@@ -27,6 +27,84 @@ Use the command-line interface:
 shortcap <video_file> <output_file>
 ```
 
+## Docker
+
+### 1. Construir la imagen
+
+```bash
+docker build -t shortcap:latest .
+```
+
+### 2. Preparar la configuración
+
+Copia el archivo de ejemplo y edítalo con tu API key de Groq:
+
+```bash
+cp config.example.json data/config.json
+```
+
+Edita `data/config.json` y reemplaza `TU_CLAVE_API` con tu clave real:
+
+```json
+{
+  "groq": {
+    "api_key": "TU_CLAVE_API",
+    "base_url": "https://api.groq.com/openai/v1",
+    "model": "whisper-large-v3-turbo"
+  },
+  "subtitles": {
+    "font_path": "/data/fonts/SyneMono-Regular.ttf",
+    "font_size": 80,
+    "font_color": "white",
+    "stroke_width": 2,
+    "stroke_color": "black",
+    "highlight_current_word": true,
+    "word_highlight_color": "yellow",
+    "line_count": 2,
+    "padding": 50,
+    "position": "center",
+    "shadow_strength": 1.0,
+    "shadow_blur": 0.1
+  },
+  "watermark": {
+    "enabled": true,
+    "logo_path": "/data/brand/logo.png",
+    "opacity": 0.60,
+    "position_corner": "top_right"
+  },
+  "files": {
+    "input": "/data/input.mp4",
+    "output": "/data/output.mp4"
+  }
+}
+```
+
+### 3. Preparar la carpeta `data/`
+
+Coloca los archivos necesarios en la carpeta `data/`:
+
+```
+data/
+├── config.json          # Tu configuración (ver paso 2)
+├── input.mp4            # El vídeo a procesar
+├── fonts/
+│   └── SyneMono-Regular.ttf   # (opcional) fuente personalizada
+└── brand/
+    └── logo.png         # (opcional) logo para watermark
+```
+
+### 4. Ejecutar
+
+```bash
+docker run --rm -v "${PWD}\data:/data" shortcap:latest
+```
+
+El vídeo procesado se guardará en `data/output.mp4`.
+
+> **Nota:** El archivo `data/config.json` está incluido en `.gitignore` para evitar subir tu API key al repositorio.
+
+---
+
 ## Features
 
 - Automatic speech recognition using OpenAI's Whisper
